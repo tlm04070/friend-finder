@@ -6,5 +6,10 @@ module.exports = function (app) {
         res.json(personData);
     });
 
+    app.post("/api/friends", function (req, res) {
+        var newPerson = req.body;
+        console.log(newPerson);
+        personData.push(newPerson);
 
+    });
 };

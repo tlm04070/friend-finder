@@ -314,7 +314,7 @@
             var newPerson = {
                 name: $("#usr").val().trim(),
                 photo: $("#photo").val().trim(),
-                scores: [
+                score: [
                     $("#q1").val().trim(),
                     $("#q2").val().trim(),
                     $("#q3").val().trim(),
@@ -327,18 +327,29 @@
                     $("#q10").val().trim()
                 ]
             }
+
             console.log(newPerson);
 
-            $.ajax({
-                type: "POST",
-                url: "http://localhost/api/friends",
-                data: newPerson,
-                success: function (data) {
-                    console.log(data);
-                },
-                dataType: "json",
-                contentType: "application/json"
-            });
+            $.post("/api/friends", newPerson,
+                function (data) {
+
+                    // If a table is available... tell user they are booked.
+                    if (data) {
+                        alert("WORKED");
+                    }
+
+                    // If a table is available... tell user they on the waiting list.
+                    else {
+                        alert("NOPE");
+                    }
+
+                    // Clear the form when submitting
+                    // $("#reserve-name").val("");
+                    // $("#reserve-phone").val("");
+                    // $("#reserve-email").val("");
+                    // $("#reserve-unique-id").val("");
+
+                });
             //     } else {
             //         console.log("nope");
             //     }
