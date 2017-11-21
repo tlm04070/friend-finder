@@ -17,10 +17,14 @@ module.exports = function (app) {
 
             for (let i = 0; i < personData.length - 1; i++) {
                 var currentFriendData = personData[i];
-                console.log(currentFriendData);
+                console.log("last: " + currentFriendData.scores);
+
                 for (let j = 0; j < currentFriendData.scores.length; j++) {
                     var currentFriendScore = currentFriendData.scores[j];
                     console.log("score: " + currentFriendScore);
+                    console.log("new person score: " + currentScore[j]);
+                    console.log("difference: " + Math.abs(parseInt(currentFriendScore) - parseInt(currentScore[j])));
+
                 }
             }
         }
