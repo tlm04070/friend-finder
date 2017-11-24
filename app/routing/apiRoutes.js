@@ -59,45 +59,64 @@ module.exports = function(app) {
           photo: friendPhoto,
           difference: sum
         };
-
-        console.log("personInfo.difference: " + personInfo.difference);
+        console.log("persondiff: " + personInfo.difference);
+        //console.log("personInfo.difference: " + personInfo.difference);
         // let popped = personInfo.difference.pop();
         // console.log(popped);
-
-        console.log(personInfo);
         personArray.push(personInfo);
       }
     };
     bestMatch();
 
-    console.log("personArray: " + personArray);
-
-    var bubbleSort = function() {
-      console.log("in");
-      for (var i = personArray.length - 1; i >= 0; i--) {
-        console.log("stepped down");
-        console.log(personArray[i].difference);
-        //Number of passes
-        for (var j = personArray.length - i; j > 0; j--) {
-          //Compare the adjacent positions
-          console.log("third step down");
-          console.log(personArray[j].difference);
-          console.log(personArray.difference[j]);
-          if (personArray[j].difference < personArray[j - 1].difference) {
-            //Swap the numbers
-            console.log("into the logic level");
-            var tmp = personArray[j].difference;
-            console.log(temp);
-            personArray.difference[j] = personArray.difference[j - 1];
-            personArray.difference[j - 1] = tmp;
+    function bubbleSort(a, par) {
+      var swapped;
+      do {
+        swapped = false;
+        for (var i = 0; i < a.length - 1; i++) {
+          if (a[i][par] > a[i + 1][par]) {
+            var temp = a[i];
+            a[i] = a[i + 1];
+            a[i + 1] = temp;
+            swapped = true;
           }
         }
-      }
-    };
-    bubbleSort();
+      } while (swapped);
+    }
+
+    bubbleSort(personArray, "difference");
+
+    for (i = 0; i < personArray.length - 1; i++) {
+      console.log(personArray[i]);
+    }
+    var bestResult = personArray.shift();
+    console.log("name: " + bestResult.name + " photo: " + bestResult.photo);
+    // var bubbleSort = function() {
+    //   console.log("in");
+    //   for (var i = personArray.length - 1; i >= 0; i--) {
+    //     console.log("stepped down");
+    //     console.log(personArray[i].difference);
+    //     //Number of passes
+    //     for (var j = personArray.length - i; j > 0; j--) {
+    //       //Compare the adjacent positions
+    //       console.log("third step down");
+    //       console.log(personArray[j].difference);
+    //       console.log(personArray.difference[j]);
+    //       if (personArray[j].difference < personArray[j - 1].difference) {
+    //         //Swap the numbers
+    //         console.log("into the logic level");
+    //         var tmp = personArray[j].difference;
+    //         console.log(temp);
+    //         personArray.difference[j] = personArray.difference[j - 1];
+    //         personArray.difference[j - 1] = tmp;
+    //       }
+    //     }
+    //   }
+    // };
+    //bubbleSort();
     // console.log(subArray);
 
     // console.log(sumTotal);
-    res.json(personData);
+
+    res.json(bestResult);
   });
 };

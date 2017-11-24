@@ -287,6 +287,28 @@
         </div>
     </div>
 
+    <div id="results-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">
+                        <strong>Best Match</strong>
+                    </h2>
+                </div>
+                <div class="modal-body">
+                    <h2 id="match-name"></h2>
+                    <img id="match-img" alt="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
 
 
@@ -329,7 +351,6 @@
             }
 
 
-            console.log(newPerson);
 
             $.post("/api/friends", newPerson,
                 function (data) {
@@ -349,8 +370,17 @@
                     // $("#reserve-phone").val("");
                     // $("#reserve-email").val("");
                     // $("#reserve-unique-id").val("");
+                    console.log(data);
+                    console.log(data.name);
+                    console.log(data.photo);
+                    $("#match-name").text(data.name);
+                    $("#match-img").attr("src", data.photo);
+                    $("#results-modal").modal("toggle");
 
                 });
+
+
+
             //     } else {
             //         console.log("nope");
             //     }
