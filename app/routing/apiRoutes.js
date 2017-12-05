@@ -1,73 +1,89 @@
 var personData = require("../data/friend");
 
-module.exports = function(app) {
-  app.get("/api/friends", function(req, res) {
+//function to export
+module.exports = function (app) {
+
+  //get response from adress
+  app.get("/api/friends", function (req, res) {
     res.json(personData);
   });
 
-  app.post("/api/friends", function(req, res) {
+  //post data to the api 
+  app.post("/api/friends", function (req, res) {
+
+    //grabs input and puts it into an array 
     var newPerson = req.body;
     personData.push(newPerson);
 
+    //sets the current score and photo from the grabbed input
     var currentScore = newPerson.scores;
     var currentPhoto = newPerson.photo;
 
+    //initial setup of four arrays to be used 
     let inputScore = [];
     let sumTotal = [];
     let personArray = [];
     let subArray = [];
+
+    //loop through the grabbed scores and push them to a new array 
     for (let i = 0; i < currentScore.length; i++) {
       var newScore = parseInt(currentScore[i]);
       inputScore.push(newScore);
     }
+
+    //adds together all of the scores from the user
     var inputSum = inputScore.reduce((a, b) => a + b, 0);
-    // console.log(inputSum);
-    var bestMatch = function() {
+
+    //runs the main function of the whole app
+    var bestMatch = function () {
+
+      //runs through the api array of objects and creates variables for their data, photo, and makes and array 
       for (let i = 0; i < personData.length - 1; i++) {
         var currentFriendData = personData[i];
-        //console.log("last: " + currentFriendData.scores);
         var friendPhoto = currentFriendData.photo;
-        //console.log("photo :" + friendPhoto);
         var differenceArr = [];
 
+        //loops through the individual friends scores 
         for (let j = 0; j < currentFriendData.scores.length; j++) {
+
+          //for each of the numbers, we subtract the user input from the friends
           var currentFriendScore = currentFriendData.scores[j];
-          //   console.log("score: " + currentFriendScore);
-          //   console.log("new person score: " + currentScore[j]);
-          //   console.log(
-          //     "difference: " +
-          //       Math.abs(parseInt(currentFriendScore) - parseInt(currentScore[j]))
-          //   );
           var difference = Math.abs(
             parseInt(currentFriendScore) - parseInt(currentScore[j])
           );
+
+          //push the difference of each number into the specific array for each friend
           differenceArr.push(difference);
         }
-        //console.log(differenceArr);
+
+        //adds up all of the differences in a single friends array
         var sum = differenceArr.reduce((a, b) => a + b, 0);
-        //console.log(sum);
         sumTotal.push(sum);
 
+        //loop through the array holding all of the friends data
         for (let u = 0; u < personArray.length; u++) {
           var totalDif = parseInt(personArray[u].difference);
           let sub = Math.abs(inputSum - totalDif);
-          //console.log(sub);
           subArray.push(sub);
         }
+
+        //creates an object per friend that has the name, photo, and difference of that friend
         var personInfo = {
           name: personData[i].name,
           photo: friendPhoto,
           difference: sum
         };
         console.log("persondiff: " + personInfo.difference);
-        //console.log("personInfo.difference: " + personInfo.difference);
-        // let popped = personInfo.difference.pop();
-        // console.log(popped);
+
+        //push each friend object to the array 
         personArray.push(personInfo);
       }
     };
+    //calls the function to run
     bestMatch();
 
+
+    //a basic bubble sort function
     function bubbleSort(a, par) {
       var swapped;
       do {
@@ -83,40 +99,18 @@ module.exports = function(app) {
       } while (swapped);
     }
 
+    //call the bubblesort function on the array of friends to put them in order least to greatest in differences
     bubbleSort(personArray, "difference");
 
     for (i = 0; i < personArray.length - 1; i++) {
       console.log(personArray[i]);
     }
+
+    //shifting the smallest number, being the leftmost, out of the array for best match
     var bestResult = personArray.shift();
     console.log("name: " + bestResult.name + " photo: " + bestResult.photo);
-    // var bubbleSort = function() {
-    //   console.log("in");
-    //   for (var i = personArray.length - 1; i >= 0; i--) {
-    //     console.log("stepped down");
-    //     console.log(personArray[i].difference);
-    //     //Number of passes
-    //     for (var j = personArray.length - i; j > 0; j--) {
-    //       //Compare the adjacent positions
-    //       console.log("third step down");
-    //       console.log(personArray[j].difference);
-    //       console.log(personArray.difference[j]);
-    //       if (personArray[j].difference < personArray[j - 1].difference) {
-    //         //Swap the numbers
-    //         console.log("into the logic level");
-    //         var tmp = personArray[j].difference;
-    //         console.log(temp);
-    //         personArray.difference[j] = personArray.difference[j - 1];
-    //         personArray.difference[j - 1] = tmp;
-    //       }
-    //     }
-    //   }
-    // };
-    //bubbleSort();
-    // console.log(subArray);
 
-    // console.log(sumTotal);
-
+    //send the results of the shifted index 
     res.json(bestResult);
   });
 };
